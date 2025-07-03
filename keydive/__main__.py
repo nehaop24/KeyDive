@@ -79,8 +79,6 @@ def main() -> None:
                 # Begin monitoring the device to extract Widevine CDM data
         core.watchdog(output=args.output, delay=args.delay, auto_stop=args.no_stop, wvd=args.wvd, keybox=args.keybox)
 
-        # Save exported files from CDM
-        from pathlib import Path
 
         files = core.cdm.export(wvd=args.wvd, keybox=args.keybox)
         for path, content in files.items():
