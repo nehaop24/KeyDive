@@ -76,7 +76,21 @@ def main() -> None:
 
         # Begin monitoring the device to extract Widevine CDM data
         # Stops automatically if sufficient data is collected, unless --no-stop is specified
+                # Begin monitoring the device to extract Widevine CDM data
         core.watchdog(output=args.output, delay=args.delay, auto_stop=args.no_stop, wvd=args.wvd, keybox=args.keybox)
+
+        # Save exported files from CDM
+        from pathlib import Path
+
+        files = core.cdm.export(wvd=args.wvd, keybox=args.keybox)
+        for path, content in files.items():
+            export_path = Path(args.output) / path
+            export_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(export_path, 'wb') as f:
+                f.write(content)
+                print(f'[✓] Saved: {export_path}')
+
+    
     except KeyboardInterrupt:
         # Graceful exit on user interrupt (Ctrl+C)
         pass
